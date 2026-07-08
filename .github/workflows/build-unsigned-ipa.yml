@@ -1,0 +1,47 @@
+name: Build Unsigned IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Show project files
+        run: |
+          pwd
+          ls -la
+          ls -la FrenchGrammar.xcodeproj
+          xcodebuild -list -project FrenchGrammar.xcodeproj
+
+      - name: Build app without signing
+        run: |
+          xcodebuild \
+            -project FrenchGrammar.xcodeproj \
+            -target FrenchGrammar \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -n 1)
+          echo "Found app at: $APP_PATH"
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          /usr/bin/zip -qry LeekFrench-unsigned.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LeekFrench-unsigned-ipa
+          path: LeekFrench-unsigned.ipa
