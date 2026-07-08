@@ -15,14 +15,13 @@ jobs:
         run: |
           pwd
           ls -la
-          ls -la FrenchGrammar.xcodeproj
           xcodebuild -list -project FrenchGrammar.xcodeproj
 
       - name: Build app without signing
         run: |
           xcodebuild \
             -project FrenchGrammar.xcodeproj \
-            -target FrenchGrammar \
+            -scheme FrenchGrammar \
             -configuration Release \
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
