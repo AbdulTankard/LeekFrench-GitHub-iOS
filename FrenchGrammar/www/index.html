@@ -1,0 +1,2294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Leek French</title>
+  <style>
+    :root {
+      --ink: #162033;
+      --muted: #657084;
+      --line: #dbe4ef;
+      --soft: #f4f8f2;
+      --panel: #fff;
+      --accent: #2f7d32;
+      --accent-dark: #1d5e23;
+      --wrong: #c2410c;
+      --right-bg: #eaf7e8;
+      --wrong-bg: #fff3ed;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Rajdhani", "Orbitron", "Eurostile", "Bank Gothic", "Arial Narrow", system-ui, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eef8ea 0%, #f8fbf6 44%, #fff 100%);
+    }
+
+    button, input { font: inherit; }
+
+    textarea, select {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1080px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: calc(20px + env(safe-area-inset-top)) 0 calc(34px + env(safe-area-inset-bottom));
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .cover {
+      display: grid;
+      grid-template-columns: minmax(120px, 220px) 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 14px 36px rgba(26, 45, 32, .1);
+    }
+
+    .cover img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #071321;
+    }
+
+    .cover h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.35rem, 4vw, 2.15rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .cover p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .section-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .tab-button {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .88);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab-button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .app-section[hidden] {
+      display: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 8vw, 4.4rem);
+      line-height: .92;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-family: "Orbitron", "Eurostile", "Bank Gothic", "Rajdhani", "Arial Narrow", system-ui, sans-serif;
+      font-weight: 900;
+      font-stretch: condensed;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.42;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(72px, 1fr));
+      gap: 8px;
+      min-width: 260px;
+    }
+
+    .stat, .panel {
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 36px rgba(26, 45, 32, .1);
+    }
+
+    .stat {
+      padding: 11px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.32rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .sidebar {
+      padding: 14px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin: 4px 0 9px;
+      text-transform: uppercase;
+    }
+
+    .mode-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mode-button, .choice {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .mode-button {
+      padding: 12px;
+    }
+
+    .mode-button.active {
+      border-color: var(--accent);
+      background: #eef8ea;
+    }
+
+    .mode-button b {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .mode-button span {
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .lesson {
+      border-top: 1px solid var(--line);
+      margin-top: 14px;
+      padding-top: 14px;
+      color: #344054;
+      font-size: .95rem;
+      line-height: 1.48;
+    }
+
+    .study-section {
+      margin-top: 12px;
+    }
+
+    .study-section b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .study-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .study-section li {
+      margin: 5px 0;
+    }
+
+    .vocab-list {
+      display: grid;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .vocab-item {
+      display: grid;
+      grid-template-columns: minmax(74px, .7fr) 1fr;
+      gap: 8px;
+      border-top: 1px solid #edf1f6;
+      padding-top: 6px;
+    }
+
+    .vocab-item span:first-child {
+      font-weight: 800;
+      color: var(--accent-dark);
+    }
+
+    .practice {
+      padding: clamp(16px, 4vw, 30px);
+      display: grid;
+      gap: 16px;
+      min-height: 560px;
+    }
+
+    .question-meta, .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .question-meta {
+      color: var(--muted);
+      font-weight: 750;
+      font-size: .92rem;
+    }
+
+    .pill {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      white-space: nowrap;
+    }
+
+    .prompt {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: clamp(18px, 4vw, 28px);
+    }
+
+    .prompt h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.55rem, 6vw, 2.5rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+      font-family: "Orbitron", "Rajdhani", "Eurostile", system-ui, sans-serif;
+    }
+
+    .prompt p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .quote-strip {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(124, 255, 79, .08);
+      color: #d9ffd0;
+      padding: 12px 14px;
+      line-height: 1.45;
+      font-style: italic;
+      box-shadow: inset 0 0 18px rgba(124, 255, 79, .07);
+    }
+
+    .speakable {
+      cursor: pointer;
+      border-bottom: 1px dotted rgba(186, 255, 138, .65);
+      text-underline-offset: 4px;
+    }
+
+    .speakable:hover {
+      color: #ffffff;
+      text-shadow: 0 0 18px rgba(124, 255, 79, .72);
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      min-height: 60px;
+      padding: 14px 16px;
+    }
+
+    .choice.correct {
+      background: var(--right-bg);
+      border-color: var(--accent);
+    }
+
+    .choice.incorrect {
+      background: var(--wrong-bg);
+      border-color: var(--wrong);
+    }
+
+    .answer-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .text-answer {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      outline: none;
+    }
+
+    .text-answer:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(47, 125, 50, .13);
+    }
+
+    .primary, .secondary {
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #edf2ea;
+      color: var(--ink);
+    }
+
+    .feedback {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      min-height: 78px;
+      padding: 14px 16px;
+      line-height: 1.45;
+    }
+
+    .feedback.good {
+      background: var(--right-bg);
+      border-color: #9bd38f;
+    }
+
+    .feedback.bad {
+      background: var(--wrong-bg);
+      border-color: #f2b18f;
+    }
+
+    .feedback b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .rule-note {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .rule-note b {
+      display: inline;
+      color: var(--ink);
+    }
+
+    .dictionary {
+      padding: clamp(16px, 4vw, 30px);
+    }
+
+    .dictionary-top {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .dictionary-top h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      letter-spacing: 0;
+    }
+
+    .dictionary-search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      outline: none;
+    }
+
+    .dictionary-search:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(47, 125, 50, .13);
+    }
+
+    .dictionary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .lookup-status {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .dictionary-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .word-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .word-card h3 {
+      margin: 0 0 4px;
+      font-size: 1.18rem;
+    }
+
+    .word-card .meta {
+      color: var(--accent-dark);
+      font-weight: 800;
+      font-size: .9rem;
+      margin-bottom: 8px;
+    }
+
+    .word-card p {
+      margin: 6px 0;
+      color: #344054;
+      line-height: 1.4;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .empty {
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .translator {
+      padding: clamp(16px, 4vw, 30px);
+    }
+
+    .translator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .translator textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(5, 18, 31, .92);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .translator-output {
+      min-height: 180px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(5, 18, 31, .92);
+      color: #d9ffd0;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .translator-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: rgba(5, 18, 31, .92);
+      color: var(--ink);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .grammar-guide {
+      padding: clamp(16px, 4vw, 30px);
+    }
+
+    .grammar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .grammar-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(5, 18, 31, .92);
+      padding: 14px;
+    }
+
+    .grammar-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.18rem;
+    }
+
+    .grammar-card p, .grammar-card li {
+      color: #d9ffd0;
+      line-height: 1.42;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .grammar-card ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .streak {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .daily-streak {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(124, 255, 79, .1);
+      color: #d9ffd0;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      box-shadow: inset 0 0 18px rgba(124, 255, 79, .07);
+    }
+
+    @media (max-width: 820px) {
+      header, .actions {
+        display: block;
+      }
+
+      .cover {
+        grid-template-columns: 92px 1fr;
+      }
+
+      .scoreboard {
+        margin-top: 16px;
+        min-width: 0;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .choices, .answer-row {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .dictionary-list {
+        grid-template-columns: 1fr;
+      }
+
+      .translator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grammar-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions .streak {
+        margin-bottom: 12px;
+      }
+    }
+    /* Galaxy theme: fluorescent light green */
+    :root {
+      --ink: #baff8a;
+      --muted: #9dff83;
+      --line: rgba(186, 255, 138, .34);
+      --soft: rgba(7, 19, 34, .78);
+      --panel: rgba(3, 10, 22, .86);
+      --accent: #7cff4f;
+      --accent-dark: #baff8a;
+      --wrong: #ff8a4c;
+      --right-bg: rgba(124, 255, 79, .16);
+      --wrong-bg: rgba(255, 138, 76, .13);
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(124, 255, 79, .22), transparent 22%),
+        radial-gradient(circle at 78% 12%, rgba(92, 170, 255, .18), transparent 24%),
+        radial-gradient(circle at 48% 82%, rgba(186, 255, 138, .14), transparent 28%),
+        linear-gradient(180deg, #020612 0%, #071225 48%, #02050c 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(228, 255, 215, .86) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(124, 255, 79, .5) 0 1px, transparent 1.7px);
+      background-size: 92px 92px, 137px 137px;
+      background-position: 12px 28px, 54px 76px;
+      opacity: .42;
+    }
+
+    h1, h2, h3, .stat b, .mode-button b {
+      color: var(--ink);
+      text-shadow: 0 0 16px rgba(124, 255, 79, .45);
+    }
+
+    .subtitle, .cover p, .prompt p, .lesson, .streak, .lookup-status, .stat span, .mode-button span {
+      color: var(--muted);
+    }
+
+    .panel, .stat, .cover {
+      background: var(--panel);
+      border-color: var(--line);
+      box-shadow: 0 0 0 1px rgba(124, 255, 79, .08), 0 18px 48px rgba(0, 0, 0, .46), 0 0 34px rgba(124, 255, 79, .1);
+      backdrop-filter: blur(10px);
+    }
+
+    .mode-button, .choice, .word-card, .feedback, .text-answer, .dictionary-search, .tab-button {
+      background: rgba(5, 18, 31, .92);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .prompt {
+      background: var(--soft);
+      border-color: var(--line);
+    }
+
+    .mode-button.active, .tab-button.active {
+      background: rgba(124, 255, 79, .18);
+      border-color: var(--accent);
+      color: var(--ink);
+      box-shadow: 0 0 22px rgba(124, 255, 79, .2);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #061006;
+      box-shadow: 0 0 18px rgba(124, 255, 79, .26);
+    }
+
+    .secondary {
+      background: rgba(124, 255, 79, .12);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .word-card p, .feedback {
+      color: #d9ffd0;
+    }
+    .feature-panel {
+      padding: clamp(16px, 4vw, 30px);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .feature-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(5, 18, 31, .92);
+      padding: 14px;
+      color: #d9ffd0;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 8px;
+    }
+
+    .meter {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.08);
+      margin-top: 8px;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(124, 255, 79, .45);
+    }
+
+    .danger span { background: #ff5f55; }
+    .warn span { background: #ffe45c; }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(124, 255, 79, .08);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .breakdown-input {
+      width: 100%;
+      min-height: 96px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(5, 18, 31, .92);
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+    }
+
+    .builder-bank, .builder-answer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 52px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .word-tile {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(124, 255, 79, .12);
+      color: var(--ink);
+      padding: 9px 11px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .coach-examples {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 820px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Leek French</h1>
+        <p class="subtitle">Intermediate French grammar drills for cleaner tense choices, pronouns, agreement, clauses, and prepositions.</p>
+      </div>
+      <div class="scoreboard" aria-label="Practice score">
+        <div class="stat"><b id="score">0</b><span>score</span></div>
+        <div class="stat"><b id="accuracy">0%</b><span>accuracy</span></div>
+        <div class="stat"><b id="streak">0</b><span>streak</span></div>
+      </div>
+    </header>
+
+    <section class="cover" id="coverSection">
+      <img id="coverImage" src="assets/leek-french-cover.png" alt="Leek French app cover">
+      <div>
+        <h2>Intermediate grammar, one clean drill at a time.</h2>
+        <p>Use the cover as your app identity, then practice the patterns that make real French sentences feel less slippery.</p>
+      </div>
+    </section>
+
+    <nav class="section-tabs" aria-label="App sections">
+      <button class="tab-button active" type="button" data-section="practiceSection">Practice</button>
+      <button class="tab-button" type="button" data-section="grammarSection">Grammar</button>
+      <button class="tab-button" type="button" data-section="masterySection">Mastery</button>
+      <button class="tab-button" type="button" data-section="dictionarySection">Dictionary</button>
+      <button class="tab-button" type="button" data-section="translatorSection">Translator</button>
+      <button class="tab-button" type="button" data-section="lyricsSection">Lyrics AI</button>
+      <button class="tab-button" type="button" data-section="aiSection">AI Lab</button>
+      <button class="tab-button" type="button" data-section="dailySection">Daily Quote</button>
+      <button class="tab-button" type="button" data-section="breakdownSection">Breakdown</button>
+      <button class="tab-button" type="button" data-section="builderSection">Builder</button>
+      <button class="tab-button" type="button" data-section="notebookSection">Notebook</button>
+      <button class="tab-button" type="button" data-section="challengeSection">Challenge</button>
+    </nav>
+
+    <section class="panel grammar-guide app-section" id="grammarSection" hidden>
+      <div class="dictionary-top">
+        <h2>Grammar Guide</h2>
+        <p class="subtitle">Study the rules first, then jump into Practice when you are ready.</p>
+      </div>
+      <div class="grammar-grid" id="grammarGuideList"></div>
+    </section>
+
+    <main class="app-section" id="practiceSection">
+      <aside class="panel sidebar">
+        <div class="label">Practice mode</div>
+        <div class="mode-list" id="modeList"></div>
+        <div class="lesson" id="lesson"></div>
+      </aside>
+
+      <section class="panel practice" aria-live="polite">
+        <div class="daily-streak" id="dailyStreakBanner"></div>
+        <div class="question-meta">
+          <span id="topicLabel">Subjunctive</span>
+          <span class="pill" id="questionCount">Question 1</span>
+        </div>
+        <div class="prompt">
+          <h2 id="promptText"></h2>
+          <p id="promptHint"></p>
+        </div>
+        <div class="quote-strip" id="questionQuote">Loading quote...</div>
+        <div id="answerArea"></div>
+        <div class="feedback" id="feedback">Choose an answer to begin.</div>
+        <div class="actions">
+          <div class="streak" id="encouragement">Stay sharp. Intermediate grammar rewards patterns.</div>
+          <div>
+            <button class="secondary" id="resetButton" type="button">Reset score</button>
+            <button class="primary" id="nextButton" type="button">Next question</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="panel dictionary app-section" id="dictionarySection" hidden>
+      <div class="dictionary-top">
+        <h2>French Dictionary</h2>
+        <p class="subtitle">Search useful intermediate words and grammar phrases from Leek French.</p>
+        <input class="dictionary-search" id="dictionarySearch" placeholder="Search French or English..." autocomplete="off">
+        <div class="dictionary-actions">
+          <button class="primary" id="lookupButton" type="button">Look up online and save</button>
+          <span class="lookup-status" id="lookupStatus"></span>
+        </div>
+      </div>
+      <div class="dictionary-list" id="dictionaryList"></div>
+    </section>
+
+    <section class="panel translator app-section" id="translatorSection" hidden>
+      <div class="dictionary-top">
+        <h2>Translator</h2>
+        <p class="subtitle">Translate between French and English, then keep recent translations in the app.</p>
+      </div>
+      <div class="translator-actions">
+        <select class="select" id="translationDirection">
+          <option value="fr|en">French to English</option>
+          <option value="en|fr">English to French</option>
+        </select>
+        <button class="primary" id="translateButton" type="button">Translate</button>
+        <button class="secondary" id="clearTranslationButton" type="button">Clear</button>
+        <span class="lookup-status" id="translateStatus"></span>
+      </div>
+      <div class="translator-grid">
+        <textarea id="translateInput" placeholder="Type a word, phrase, or sentence..."></textarea>
+        <div class="translator-output" id="translateOutput">Your translation will appear here.</div>
+      </div>
+      <div class="dictionary-top">
+        <h2>Recent Translations</h2>
+      </div>
+      <div class="history-list" id="translationHistory"></div>
+    </section>
+
+    <section class="panel translator app-section" id="lyricsSection" hidden>
+      <div class="dictionary-top">
+        <h2>Lyrics AI Translator</h2>
+        <p class="subtitle">Paste lyrics and translate them line by line. Add an AI backend URL for smarter, context-aware translation.</p>
+      </div>
+      <div class="translator-actions">
+        <select class="select" id="lyricsDirection">
+          <option value="fr|en">French lyrics to English</option>
+          <option value="en|fr">English lyrics to French</option>
+        </select>
+        <button class="primary" id="lyricsTranslateButton" type="button">Translate lyrics</button>
+        <button class="secondary" id="lyricsClearButton" type="button">Clear</button>
+        <span class="lookup-status" id="lyricsStatus"></span>
+      </div>
+      <input class="dictionary-search" id="lyricsBackendUrl" placeholder="Optional AI backend URL, e.g. https://your-server.com/translate-lyrics">
+      <div class="translator-grid">
+        <textarea id="lyricsInput" placeholder="Paste lyrics here..."></textarea>
+        <div class="translator-output" id="lyricsOutput">Your lyrics translation will appear here.</div>
+      </div>
+      <div class="feature-card">
+        <h3>AI backend format</h3>
+        <p>The app sends JSON: <b>{ text, direction }</b>. Your backend should return <b>{ translation }</b>. This keeps private API keys off the phone.</p>
+      </div>
+    </section>
+
+    <section class="panel translator app-section" id="aiSection" hidden>
+      <div class="dictionary-top">
+        <h2>AI Lab</h2>
+        <p class="subtitle">Generate grammar questions and chat with a French coach. Add a backend URL for real AI, or use the built-in fallback.</p>
+      </div>
+      <input class="dictionary-search" id="aiBackendUrl" placeholder="Optional AI backend URL, e.g. https://your-server.com/leek-ai">
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>Unlimited Question Generator</h3>
+          <select class="select" id="aiTopicSelect"></select>
+          <select class="select" id="aiDifficultySelect">
+            <option value="easy">Easy</option>
+            <option value="intermediate" selected>Intermediate</option>
+            <option value="advanced">Advanced</option>
+            <option value="native">Native-level</option>
+          </select>
+          <button class="primary" id="aiGenerateButton" type="button">Generate questions</button>
+          <p id="aiGenerateStatus"></p>
+        </article>
+        <article class="feature-card">
+          <h3>AI Conversation Coach</h3>
+          <textarea id="aiChatInput" placeholder="Write a French sentence or ask for help..."></textarea>
+          <button class="primary" id="aiChatButton" type="button">Ask coach</button>
+          <p id="aiChatStatus"></p>
+        </article>
+      </div>
+      <div class="feature-grid" id="aiGeneratedOutput"></div>
+      <div class="feature-card" id="aiCoachOutput">The coach response will appear here.</div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="masterySection" hidden>
+      <h2>Grammar Mastery</h2>
+      <p class="subtitle">A heat map of what you know, what is shaky, and what Leek French recommends next.</p>
+      <div class="feature-grid" id="masteryGrid"></div>
+      <div class="feature-card" id="recommendationCard"></div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="dailySection" hidden>
+      <h2>Daily Quote</h2>
+      <div class="feature-card" id="dailyQuoteCard"></div>
+      <div class="tag-row">
+        <button class="primary" id="dailySpeakButton" type="button">Hear pronunciation</button>
+        <button class="secondary" id="dailyExplainButton" type="button">Explain grammar</button>
+      </div>
+      <div class="feature-card" id="dailyExplanation"></div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="breakdownSection" hidden>
+      <h2>Sentence Breakdown</h2>
+      <p class="subtitle">Paste a French sentence and Leek French will label likely grammar pieces.</p>
+      <textarea class="breakdown-input" id="breakdownInput">Je lui en ai donné trois parce qu'il en avait besoin.</textarea>
+      <div class="tag-row">
+        <button class="primary" id="breakdownButton" type="button">Break down sentence</button>
+        <button class="secondary" id="breakdownSpeakButton" type="button">Hear sentence</button>
+      </div>
+      <div class="feature-grid" id="breakdownOutput"></div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="builderSection" hidden>
+      <h2>Sentence Builder</h2>
+      <p class="subtitle">Tap the tiles in order to build the sentence.</p>
+      <div class="feature-card"><b>Build:</b> Je lui ai parlé hier.</div>
+      <div class="builder-bank" id="builderBank"></div>
+      <div class="builder-answer" id="builderAnswer"></div>
+      <div class="tag-row">
+        <button class="primary" id="builderCheckButton" type="button">Check sentence</button>
+        <button class="secondary" id="builderResetButton" type="button">Reset</button>
+      </div>
+      <div class="feature-card" id="builderFeedback"></div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="notebookSection" hidden>
+      <h2>Mistake Notebook</h2>
+      <p class="subtitle">Missed questions are saved automatically so you can review weak spots.</p>
+      <div class="tag-row">
+        <button class="primary" id="practiceWeakButton" type="button">Recommend weak practice</button>
+        <button class="secondary" id="clearMistakesButton" type="button">Clear notebook</button>
+      </div>
+      <div class="feature-grid" id="mistakeList"></div>
+    </section>
+
+    <section class="panel feature-panel app-section" id="challengeSection" hidden>
+      <h2>Challenge Mode</h2>
+      <div class="feature-grid">
+        <article class="feature-card"><h3>Boss Battle</h3><p>Pick your weakest topic and try 10 questions with no misses.</p><button class="primary" id="bossButton" type="button">Start weakest boss</button></article>
+        <article class="feature-card"><h3>Exam Mode</h3><p>DELF/DALF/TEF-style timed drills can build from your grammar bank.</p><button class="secondary" id="examButton" type="button">Start exam-style set</button></article>
+        <article class="feature-card"><h3>Achievements</h3><div id="achievementList"></div></article>
+        <article class="feature-card"><h3>AI Lab</h3><p>Generate grammar questions and use the conversation coach from the new AI Lab tab.</p><button class="secondary" type="button" data-open-section="aiSection">Open AI Lab</button></article>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const dictionary = [
+      { word: "bien que", type: "conjunction", meaning: "although", example: "Bien qu'il soit fatigué, il sort." },
+      { word: "il faut que", type: "expression", meaning: "it is necessary that", example: "Il faut que tu sois à l'heure." },
+      { word: "pour que", type: "conjunction", meaning: "so that; in order that", example: "Je parle lentement pour que tu comprennes." },
+      { word: "y", type: "pronoun", meaning: "there; to it; to them", example: "Je vais à Lyon. J'y vais demain." },
+      { word: "en", type: "pronoun", meaning: "some; any; of it; of them", example: "Elle a trois frères. Elle en a trois." },
+      { word: "en + number", type: "pronoun pattern", meaning: "en replaces de + noun after a quantity", example: "J'ai trois pommes. J'en ai trois." },
+      { word: "dont", type: "relative pronoun", meaning: "whose; of which; that ... of", example: "C'est le sujet dont je me souviens." },
+      { word: "où", type: "relative pronoun", meaning: "where; when", example: "Le jour où nous sommes partis était froid." },
+      { word: "pendant que", type: "conjunction", meaning: "while", example: "Pendant que je travaillais, mon téléphone a sonné." },
+      { word: "souvent", type: "adverb", meaning: "often", example: "Je rendais souvent visite à ma grand-mère." },
+      { word: "hier", type: "adverb", meaning: "yesterday", example: "Hier, nous avons vu un film." },
+      { word: "avoir besoin de", type: "verb phrase", meaning: "to need", example: "J'ai besoin de parler avec toi." },
+      { word: "commencer à", type: "verb phrase", meaning: "to begin to", example: "Elle commence à comprendre." },
+      { word: "hésiter à", type: "verb phrase", meaning: "to hesitate to", example: "Il hésite à répondre." },
+      { word: "réussir à", type: "verb phrase", meaning: "to manage to; to succeed in", example: "Nous avons réussi à finir à temps." },
+      { word: "à temps", type: "phrase", meaning: "on time", example: "Ils sont arrivés à temps." },
+      { word: "à l'heure", type: "phrase", meaning: "on time; at the hour", example: "Tu dois être à l'heure." },
+      { word: "se souvenir de", type: "verb phrase", meaning: "to remember", example: "Je me souviens de cette histoire." },
+      { word: "prêter", type: "verb", meaning: "to lend", example: "Tu me prêtes ta voiture ?" },
+      { word: "sonner", type: "verb", meaning: "to ring", example: "Mon téléphone a sonné." },
+      { word: "voisin / voisine", type: "noun", meaning: "neighbor", example: "La femme qui parle est ma voisine." }
+    ];
+
+    dictionary.push(
+      { word: "object pronoun", type: "grammar term", meaning: "a pronoun that replaces a direct or indirect object", example: "Je le lui donne." },
+      { word: "pronoun order", type: "grammar term", meaning: "the fixed order of French object pronouns before the verb", example: "Je te le donne." },
+      { word: "plus-que-parfait", type: "tense", meaning: "the pluperfect; an action completed before another past action", example: "J'avais déjà mangé." },
+      { word: "conditionnel", type: "mood/tense", meaning: "conditional forms such as would, could, or polite requests", example: "Je voudrais un café." },
+      { word: "si clause", type: "grammar term", meaning: "a conditional sentence using si", example: "Si j'avais su, je serais venu." },
+      { word: "ce qui / ce que / ce dont", type: "relative pattern", meaning: "what, what, or what/of which when there is no exact noun before it", example: "Ce que je veux, c'est parler mieux." },
+      { word: "agreement with avoir", type: "grammar rule", meaning: "past participles agree with a preceding direct object", example: "Les pommes que j'ai mangées." },
+      { word: "ne...que", type: "negation", meaning: "only", example: "Je n'ai que deux euros." },
+      { word: "reported speech", type: "grammar term", meaning: "reporting what someone said, often with tense changes", example: "Il a dit qu'il viendrait." }
+    );
+
+    const modes = {
+      subjunctive: {
+        name: "Subjunctive",
+        description: "Doubt, desire, necessity",
+        lesson: "Use the subjunctive after many expressions of necessity, doubt, emotion, and desire, especially after que.",
+        grammar: [
+          "The subjunctive is used when the speaker is not simply reporting a fact: it often appears after need, doubt, emotion, judgment, or desire.",
+          "Common triggers include il faut que, je veux que, bien que, il est possible que, and pour que.",
+          "Most present subjunctive forms come from the ils/elles present stem plus endings: -e, -es, -e, -ions, -iez, -ent."
+        ],
+        vocabulary: [
+          ["il faut que", "it is necessary that"],
+          ["bien que", "although"],
+          ["venir", "to come"],
+          ["partir", "to leave"],
+          ["à l'heure", "on time"]
+        ],
+        questions: [
+          { type: "choice", prompt: "Il faut que tu ___ à l'heure.", hint: "Choose the subjunctive form of être.", answer: "sois", choices: ["es", "seras", "sois", "étais"], explain: "Il faut que triggers the subjunctive: que tu sois." },
+          { type: "text", prompt: "Je veux qu'elle ___ avec nous. (venir)", hint: "Type the present subjunctive.", answer: "vienne", explain: "Vouloir que expresses desire, so venir becomes qu'elle vienne." },
+          { type: "choice", prompt: "Bien qu'il ___ fatigué, il sort.", hint: "Although he is tired...", answer: "soit", choices: ["est", "sera", "soit", "était"], explain: "Bien que is followed by the subjunctive: bien qu'il soit." },
+          { type: "text", prompt: "Il est possible que nous ___ demain. (partir)", hint: "Type the present subjunctive.", answer: "partions", explain: "Possible que takes the subjunctive: que nous partions." }
+        ]
+      },
+      pronouns: {
+        name: "Pronouns",
+        description: "Y, en, order, doubles",
+        lesson: "Y often replaces à + place or thing. En often replaces de + noun or quantities. In compound tenses, object pronouns go before the auxiliary.",
+        grammar: [
+          "Y usually means there or to it/them, replacing à plus a place or thing.",
+          "En usually means some, any, of it, or of them, replacing de plus a noun or a counted quantity.",
+          "With two object pronouns, the usual order is me/te/se/nous/vous, then le/la/les, then lui/leur, then y, then en."
+        ],
+        vocabulary: [
+          ["y", "there; to it"],
+          ["en", "some; of it; of them"],
+          ["prêter", "to lend"],
+          ["donner", "to give"],
+          ["frère", "brother"]
+        ],
+        questions: [
+          { type: "choice", prompt: "Tu vas à Lyon ? Oui, j'___ vais demain.", hint: "Replace à Lyon.", answer: "y", choices: ["en", "y", "le", "lui"], explain: "Y replaces à + a place: j'y vais." },
+          { type: "text", prompt: "Elle a trois frères. Elle ___ a trois.", hint: "Replace the noun after a number.", answer: "en", explain: "En replaces the counted noun: elle en a trois." },
+          { type: "choice", prompt: "J'ai donné le livre à Marie. Je ___ ai donné le livre.", hint: "Replace à Marie.", answer: "lui", choices: ["la", "lui", "y", "en"], explain: "For an indirect object person, use lui." },
+          { type: "choice", prompt: "Tu me prêtes ta voiture ? Oui, je ___ prête.", hint: "Replace it to me.", answer: "te la", choices: ["la te", "te la", "t'en", "y te"], explain: "With two object pronouns, me/te/se/nous/vous comes before le/la/les." }
+        ]
+      },
+      enPlacement: {
+        name: "En Placement",
+        description: "En with quantities",
+        lesson: "En can replace de + noun or the noun after a quantity. With quantities, the number or amount usually stays after the verb: subject + en + verb + number.",
+        grammar: [
+          "En is an adverbial/object pronoun that often means of it, of them, some, or any.",
+          "When en replaces a noun after a number, the number remains: J'ai trois pommes becomes J'en ai trois.",
+          "The basic present-tense pattern is subject + en + verb + quantity: J'en ai deux, Il en veut trois, Elle en a beaucoup.",
+          "In simple tenses, en goes before the conjugated verb. In infinitive structures, it usually goes before the infinitive: Je vais en acheter deux."
+        ],
+        vocabulary: [
+          ["en", "of it; of them; some; any"],
+          ["une pomme", "an apple"],
+          ["beaucoup", "a lot"],
+          ["vouloir", "to want"],
+          ["acheter", "to buy"]
+        ],
+        questions: [
+          { type: "choice", prompt: "J'ai trois pommes. → J'___ ai trois.", hint: "Replace pommes with en.", answer: "en", choices: ["y", "en", "les", "leur"], explain: "En replaces the noun after the number, and the number stays after the verb: J'en ai trois." },
+          { type: "choice", prompt: "Il veut trois billets. → Il ___ veut trois.", hint: "He wants three of them.", answer: "en", choices: ["les", "en", "y", "lui"], explain: "Use en for a counted noun: Il en veut trois." },
+          { type: "text", prompt: "Elle a beaucoup de livres. → Elle ___ a beaucoup.", hint: "Type the pronoun.", answer: "en", explain: "En replaces de livres. Beaucoup stays after the verb: Elle en a beaucoup." },
+          { type: "choice", prompt: "Nous achetons deux croissants. → Nous ___ achetons deux.", hint: "We are buying two of them.", answer: "en", choices: ["en", "les", "leur", "y"], explain: "With a quantity, en replaces the noun and the number remains." },
+          { type: "text", prompt: "Je vais acheter deux pommes. → Je vais ___ acheter deux.", hint: "With an infinitive, en goes before the infinitive.", answer: "en", explain: "In this structure, en goes before acheter: Je vais en acheter deux." }
+        ]
+      },
+      tenses: {
+        name: "Tenses",
+        description: "Passé composé vs imparfait",
+        lesson: "Use imparfait for background, habits, and ongoing states. Use passé composé for completed events or actions that move the story forward.",
+        grammar: [
+          "Imparfait describes background, repeated habits, ongoing actions, age, weather, time, and states of mind.",
+          "Passé composé presents a completed event, a sudden change, or the next action in a story.",
+          "Many stories use both: the imparfait sets the scene, then the passé composé tells what happened."
+        ],
+        vocabulary: [
+          ["quand", "when"],
+          ["souvent", "often"],
+          ["hier", "yesterday"],
+          ["pendant que", "while"],
+          ["sonner", "to ring"]
+        ],
+        questions: [
+          { type: "choice", prompt: "Quand j'étais petit, je ___ souvent chez ma grand-mère.", hint: "Habitual past action.", answer: "allais", choices: ["suis allé", "allais", "irai", "vais"], explain: "Often/repeated past actions usually use the imparfait." },
+          { type: "choice", prompt: "Hier, nous ___ un film très drôle.", hint: "Completed event yesterday.", answer: "avons vu", choices: ["voyions", "avons vu", "verrons", "voyons"], explain: "Hier marks a completed event, so use passé composé." },
+          { type: "text", prompt: "Il pleuvait quand elle ___. (arriver)", hint: "Type the passé composé form.", answer: "est arrivée", explain: "The rain is background; her arrival is the completed event. Arriver uses être." },
+          { type: "choice", prompt: "Pendant que je ___, mon téléphone a sonné.", hint: "Ongoing action interrupted.", answer: "travaillais", choices: ["ai travaillé", "travaillais", "travaille", "travaillerai"], explain: "The ongoing background action uses imparfait." }
+        ]
+      },
+      relatives: {
+        name: "Relative Clauses",
+        description: "Qui, que, dont, où",
+        lesson: "Qui is the subject of the relative clause. Que is the direct object. Dont replaces de + noun. Où refers to place or time.",
+        grammar: [
+          "Qui is used when the relative pronoun is the subject of the next verb.",
+          "Que is used when the relative pronoun is the direct object of the next verb.",
+          "Dont replaces de plus a noun, including after verbs and phrases like parler de, avoir besoin de, and se souvenir de."
+        ],
+        vocabulary: [
+          ["dont", "whose; of which; that ... of"],
+          ["où", "where; when"],
+          ["célèbre", "famous"],
+          ["voisin/voisine", "neighbor"],
+          ["se souvenir de", "to remember"]
+        ],
+        questions: [
+          { type: "choice", prompt: "Le livre ___ tu lis est célèbre.", hint: "The book that you are reading.", answer: "que", choices: ["qui", "que", "dont", "où"], explain: "Tu is the subject and le livre is the object, so use que." },
+          { type: "choice", prompt: "La femme ___ parle est ma voisine.", hint: "The woman who is speaking.", answer: "qui", choices: ["que", "qui", "dont", "où"], explain: "The woman is the subject of parle, so use qui." },
+          { type: "text", prompt: "C'est le sujet ___ je me souviens.", hint: "Se souvenir de takes de.", answer: "dont", explain: "Dont replaces de + noun: le sujet dont je me souviens." },
+          { type: "choice", prompt: "Le jour ___ nous sommes partis était froid.", hint: "The day when we left.", answer: "où", choices: ["dont", "que", "où", "qui"], explain: "Où can refer to time as well as place." }
+        ]
+      },
+      prepositions: {
+        name: "Prepositions",
+        description: "Verbs plus à/de",
+        lesson: "Many French verbs require a specific preposition before an infinitive or noun. The pattern often differs from English.",
+        grammar: [
+          "Some verbs take à before an infinitive, such as commencer à, hésiter à, and réussir à.",
+          "Some expressions take de before an infinitive, such as avoir besoin de, essayer de, and décider de.",
+          "These prepositions are part of the verb pattern, so they are best learned together with the verb."
+        ],
+        vocabulary: [
+          ["avoir besoin de", "to need"],
+          ["commencer à", "to begin to"],
+          ["hésiter à", "to hesitate to"],
+          ["réussir à", "to manage to; to succeed in"],
+          ["à temps", "on time"]
+        ],
+        questions: [
+          { type: "choice", prompt: "J'ai besoin ___ parler avec toi.", hint: "Avoir besoin de + infinitive.", answer: "de", choices: ["à", "de", "pour", "en"], explain: "Avoir besoin is followed by de." },
+          { type: "choice", prompt: "Elle commence ___ comprendre.", hint: "Commencer à + infinitive.", answer: "à", choices: ["de", "à", "par", "pour"], explain: "Commencer is usually followed by à before an infinitive." },
+          { type: "text", prompt: "Il hésite ___ répondre.", hint: "Hésiter à + infinitive.", answer: "à", explain: "Hésiter takes à before an infinitive." },
+          { type: "choice", prompt: "Nous avons réussi ___ finir à temps.", hint: "Réussir à + infinitive.", answer: "à", choices: ["de", "à", "en", "avec"], explain: "Réussir à means to manage/succeed in doing something." }
+        ]
+      }
+    };
+
+    Object.assign(modes, {
+      objectPronouns: {
+        name: "Object Pronouns",
+        description: "Le, la, les, lui, leur, en",
+        lesson: "Object pronouns replace nouns so you do not repeat them. Direct objects use le, la, l', les. Indirect objects to people use lui or leur. En replaces de + noun or quantities.",
+        grammar: [
+          "Direct object pronouns answer whom or what: Je vois Paul -> Je le vois.",
+          "Indirect object pronouns answer to whom or for whom: Je parle à Marie -> Je lui parle.",
+          "When en replaces a counted noun, the number remains after the verb: J'en ai trois.",
+          "With two pronouns, the order matters: Je le lui donne."
+        ],
+        vocabulary: [["le/la/les", "him, her, it, them"], ["lui/leur", "to him/her, to them"], ["en", "of it, of them, some"], ["donner", "to give"], ["une pomme", "an apple"]],
+        questions: [
+          { type: "choice", prompt: "Je donne le livre à Paul. → Je ___ donne.", hint: "I give it to him.", answer: "le lui", choices: ["lui le", "le lui", "en lui", "y le"], explain: "Le replaces le livre and lui replaces à Paul: Je le lui donne." },
+          { type: "text", prompt: "J'ai trois pommes. → J'___ ai trois.", hint: "Replace pommes.", answer: "en", explain: "En replaces the noun after a quantity: J'en ai trois." }
+        ]
+      },
+      yVsEn: {
+        name: "Y vs En",
+        description: "J'y vais / J'en parle",
+        lesson: "Y usually replaces à + place or thing. En usually replaces de + noun, de + place, or a quantity.",
+        grammar: ["Use y for à + place: Je vais à Paris -> J'y vais.", "Use y for à + thing: Je pense à ce problème -> J'y pense.", "Use en for de + noun: Je parle de ce film -> J'en parle.", "Use en for quantities: J'ai deux stylos -> J'en ai deux."],
+        vocabulary: [["y", "there, to it"], ["en", "of it, about it, some"], ["parler de", "to talk about"], ["penser à", "to think about"]],
+        questions: [
+          { type: "choice", prompt: "Je vais à Paris. → J'___ vais.", hint: "Replace à Paris.", answer: "y", choices: ["en", "y", "le", "lui"], explain: "Y replaces à + a place: J'y vais." },
+          { type: "choice", prompt: "Je parle de mon voyage. → J'___ parle.", hint: "Replace de mon voyage.", answer: "en", choices: ["y", "en", "le", "lui"], explain: "En replaces de + noun: J'en parle." }
+        ]
+      },
+      pronounOrder: {
+        name: "Pronoun Order",
+        description: "Je te le donne",
+        lesson: "French object pronouns follow a fixed order before the verb: me/te/se/nous/vous, then le/la/les, then lui/leur, then y, then en.",
+        grammar: ["Je te le donne means I give it to you.", "Le/la/les come before lui/leur: Je le lui donne.", "Y comes before en: Il y en a.", "In negative sentences, pronouns stay before the verb: Je ne te le donne pas."],
+        vocabulary: [["te le", "it to you"], ["le lui", "it to him/her"], ["y en", "there/of them"], ["donner", "to give"]],
+        questions: [
+          { type: "choice", prompt: "I give it to you. → Je ___ donne.", hint: "Use te + le.", answer: "te le", choices: ["le te", "te le", "toi le", "le toi"], explain: "Te comes before le: Je te le donne." },
+          { type: "choice", prompt: "I give it to her. → Je ___ donne.", hint: "Use le + lui.", answer: "le lui", choices: ["lui le", "le lui", "la lui", "y lui"], explain: "Le/la/les come before lui/leur." }
+        ]
+      },
+      plusQueParfait: {
+        name: "Plus-Que-Parfait",
+        description: "J'avais déjà mangé",
+        lesson: "The plus-que-parfait describes an action that had already happened before another past moment.",
+        grammar: ["Form it with the imparfait of avoir or être plus the past participle.", "Example: J'avais mangé means I had eaten.", "Use it to show what happened earlier than another past action.", "With être verbs, the past participle agrees with the subject."],
+        vocabulary: [["déjà", "already"], ["avant", "before"], ["manger", "to eat"], ["partir", "to leave"]],
+        questions: [
+          { type: "choice", prompt: "J'___ déjà mangé.", hint: "I had already eaten.", answer: "avais", choices: ["ai", "avais", "aurai", "aies"], explain: "Use imparfait of avoir + past participle: j'avais mangé." },
+          { type: "text", prompt: "Elle ___ partie avant midi.", hint: "She had left before noon.", answer: "était", explain: "Partir uses être: elle était partie." }
+        ]
+      },
+      conditional: {
+        name: "Conditional",
+        description: "Je voudrais / j'aurais aimé",
+        lesson: "The conditional expresses would, polite requests, and hypothetical actions.",
+        grammar: ["Use the future stem plus imparfait endings: je voudrais, tu voudrais, il voudrait.", "Je voudrais is a polite way to say I would like.", "Past conditional uses avoir or être in the conditional plus past participle: j'aurais aimé.", "It often appears with si clauses."],
+        vocabulary: [["je voudrais", "I would like"], ["j'aurais aimé", "I would have liked"], ["pouvoir", "to be able to"], ["aimer", "to like/love"]],
+        questions: [
+          { type: "choice", prompt: "I would like a coffee. → Je ___ un café.", hint: "Polite request.", answer: "voudrais", choices: ["veux", "voudrais", "voudrai", "voulais"], explain: "Je voudrais is the conditional and is polite." },
+          { type: "text", prompt: "J'___ aimé venir.", hint: "I would have liked to come.", answer: "aurais", explain: "Past conditional uses avoir in conditional: j'aurais aimé." }
+        ]
+      },
+      siClauses: {
+        name: "Si Clauses",
+        description: "Si j'avais su...",
+        lesson: "Si clauses connect a condition with a result. The tense pattern depends on whether the situation is real, possible, or unreal.",
+        grammar: ["Present + future: Si j'ai le temps, je viendrai.", "Imparfait + conditional: Si j'avais le temps, je viendrais.", "Plus-que-parfait + past conditional: Si j'avais su, je serais venu.", "Do not use the future or conditional directly after si in these patterns."],
+        vocabulary: [["si", "if"], ["savoir", "to know"], ["venir", "to come"], ["j'aurais", "I would have"]],
+        questions: [
+          { type: "choice", prompt: "Si j'avais su, je ___ venu.", hint: "I would have come.", answer: "serais", choices: ["suis", "serais", "étais", "serai"], explain: "Unreal past: plus-que-parfait + past conditional." },
+          { type: "choice", prompt: "Si j'avais le temps, je ___.", hint: "I would come.", answer: "viendrais", choices: ["viendrai", "viens", "viendrais", "venais"], explain: "Imparfait after si pairs with conditional in the result." }
+        ]
+      },
+      ceRelatives: {
+        name: "Ce Relatives",
+        description: "Ce qui, ce que, ce dont",
+        lesson: "Use ce qui, ce que, and ce dont when the relative pronoun means what and does not refer to one specific noun before it.",
+        grammar: ["Ce qui is the subject: Ce qui m'intéresse, c'est la grammaire.", "Ce que is the direct object: Ce que je veux, c'est parler.", "Ce dont replaces de + idea: Ce dont j'ai besoin, c'est de pratique.", "These patterns often translate as what in English."],
+        vocabulary: [["ce qui", "what, subject"], ["ce que", "what, direct object"], ["ce dont", "what/of what"], ["avoir besoin de", "to need"]],
+        questions: [
+          { type: "choice", prompt: "___ je veux, c'est parler mieux.", hint: "What I want...", answer: "Ce que", choices: ["Ce qui", "Ce que", "Ce dont", "Dont"], explain: "Je veux needs a direct object, so use ce que." },
+          { type: "choice", prompt: "___ me plaît, c'est le français.", hint: "What pleases me...", answer: "Ce qui", choices: ["Ce que", "Ce dont", "Ce qui", "Que"], explain: "The relative pronoun is the subject of plaît, so use ce qui." }
+        ]
+      },
+      agreementRules: {
+        name: "Agreement Rules",
+        description: "Les pommes que j'ai mangées",
+        lesson: "With avoir, the past participle agrees with the direct object only when that object comes before the verb.",
+        grammar: ["No agreement when the object comes after: J'ai mangé les pommes.", "Agreement when the direct object comes before: Les pommes que j'ai mangées.", "The ending changes for feminine and plural: -e, -s, -es.", "This rule often appears with que and object pronouns."],
+        vocabulary: [["mangé/mangée/mangés/mangées", "eaten"], ["une pomme", "an apple"], ["que", "that/which"], ["direct object", "the thing receiving the action"]],
+        questions: [
+          { type: "choice", prompt: "Les pommes que j'ai ___", hint: "Pommes is feminine plural and comes before.", answer: "mangées", choices: ["mangé", "mangée", "mangés", "mangées"], explain: "The preceding direct object is feminine plural, so add -es." },
+          { type: "choice", prompt: "J'ai ___ les pommes.", hint: "Object comes after the verb.", answer: "mangé", choices: ["mangé", "mangée", "mangés", "mangées"], explain: "With avoir, no agreement when the direct object comes after." }
+        ]
+      },
+      negation: {
+        name: "Negation",
+        description: "Ne...que, plus, jamais",
+        lesson: "French negation usually surrounds the conjugated verb. Ne...que means only, ne...plus means no longer, and ne...jamais means never.",
+        grammar: ["Ne...pas is the basic not.", "Ne...plus means no more or no longer.", "Ne...jamais means never.", "Ne...que is restrictive and means only."],
+        vocabulary: [["ne...que", "only"], ["ne...plus", "no longer"], ["ne...jamais", "never"], ["encore", "still/yet"]],
+        questions: [
+          { type: "choice", prompt: "Je n'ai ___ deux euros.", hint: "I only have two euros.", answer: "que", choices: ["pas", "plus", "jamais", "que"], explain: "Ne...que means only." },
+          { type: "choice", prompt: "Il ne vient ___ ici.", hint: "He never comes here.", answer: "jamais", choices: ["que", "plus", "jamais", "rien"], explain: "Ne...jamais means never." }
+        ]
+      },
+      reportedSpeech: {
+        name: "Reported Speech",
+        description: "Il a dit qu'il viendrait",
+        lesson: "Reported speech tells what someone said. When reporting from a past tense, future often shifts to conditional.",
+        grammar: ["Direct: Il dit: Je viendrai.", "Reported in the past: Il a dit qu'il viendrait.", "Que introduces the reported statement.", "Pronouns and time expressions may change depending on context."],
+        vocabulary: [["dire", "to say/tell"], ["viendrait", "would come"], ["que", "that"], ["discours indirect", "reported speech"]],
+        questions: [
+          { type: "choice", prompt: "Il a dit: Je viendrai. → Il a dit qu'il ___.", hint: "Future shifts to conditional.", answer: "viendrait", choices: ["viendra", "vient", "viendrait", "venait"], explain: "In past reported speech, viendrai becomes viendrait." },
+          { type: "text", prompt: "Elle a dit: Je suis prête. → Elle a dit qu'elle ___ prête.", hint: "Report the statement.", answer: "était", explain: "In past reporting, present often shifts to imparfait: elle était prête." }
+        ]
+      }
+    });
+
+    const state = { modeKey: "subjunctive", questionIndex: 0, answered: false, score: 0, attempted: 0, streak: 0 };
+    const modeList = document.getElementById("modeList");
+    const lesson = document.getElementById("lesson");
+    const topicLabel = document.getElementById("topicLabel");
+    const questionCount = document.getElementById("questionCount");
+    const promptText = document.getElementById("promptText");
+    const promptHint = document.getElementById("promptHint");
+    const answerArea = document.getElementById("answerArea");
+    const feedback = document.getElementById("feedback");
+    const questionQuote = document.getElementById("questionQuote");
+    const score = document.getElementById("score");
+    const accuracy = document.getElementById("accuracy");
+    const streak = document.getElementById("streak");
+    const encouragement = document.getElementById("encouragement");
+    const nextButton = document.getElementById("nextButton");
+    const resetButton = document.getElementById("resetButton");
+    const dictionarySearch = document.getElementById("dictionarySearch");
+    const dictionaryList = document.getElementById("dictionaryList");
+    const lookupButton = document.getElementById("lookupButton");
+    const lookupStatus = document.getElementById("lookupStatus");
+    const savedDictionary = loadSavedDictionary();
+    const translationDirection = document.getElementById("translationDirection");
+    const translateInput = document.getElementById("translateInput");
+    const translateOutput = document.getElementById("translateOutput");
+    const translateButton = document.getElementById("translateButton");
+    const clearTranslationButton = document.getElementById("clearTranslationButton");
+    const translateStatus = document.getElementById("translateStatus");
+    const translationHistory = document.getElementById("translationHistory");
+    const lyricsDirection = document.getElementById("lyricsDirection");
+    const lyricsInput = document.getElementById("lyricsInput");
+    const lyricsOutput = document.getElementById("lyricsOutput");
+    const lyricsBackendUrl = document.getElementById("lyricsBackendUrl");
+    const lyricsTranslateButton = document.getElementById("lyricsTranslateButton");
+    const lyricsClearButton = document.getElementById("lyricsClearButton");
+    const lyricsStatus = document.getElementById("lyricsStatus");
+    const aiBackendUrl = document.getElementById("aiBackendUrl");
+    const aiTopicSelect = document.getElementById("aiTopicSelect");
+    const aiDifficultySelect = document.getElementById("aiDifficultySelect");
+    const aiGenerateButton = document.getElementById("aiGenerateButton");
+    const aiGenerateStatus = document.getElementById("aiGenerateStatus");
+    const aiGeneratedOutput = document.getElementById("aiGeneratedOutput");
+    const aiChatInput = document.getElementById("aiChatInput");
+    const aiChatButton = document.getElementById("aiChatButton");
+    const aiChatStatus = document.getElementById("aiChatStatus");
+    const aiCoachOutput = document.getElementById("aiCoachOutput");
+    const savedTranslations = loadSavedTranslations();
+    const grammarGuideList = document.getElementById("grammarGuideList");
+    const dailyStreakBanner = document.getElementById("dailyStreakBanner");
+    const masteryGrid = document.getElementById("masteryGrid");
+    const recommendationCard = document.getElementById("recommendationCard");
+    const dailyQuoteCard = document.getElementById("dailyQuoteCard");
+    const dailyExplanation = document.getElementById("dailyExplanation");
+    const breakdownInput = document.getElementById("breakdownInput");
+    const breakdownOutput = document.getElementById("breakdownOutput");
+    const builderBank = document.getElementById("builderBank");
+    const builderAnswer = document.getElementById("builderAnswer");
+    const builderFeedback = document.getElementById("builderFeedback");
+    const mistakeList = document.getElementById("mistakeList");
+    const achievementList = document.getElementById("achievementList");
+    const practiceStats = loadJSON("leekFrenchPracticeStats", {});
+    const mistakes = loadJSON("leekFrenchMistakes", []);
+    const dailyStreak = loadJSON("leekFrenchDailyStreak", { count: 0, lastDate: "", celebratedDate: "" });
+    const builderTarget = ["Je", "lui", "ai", "parlé", "hier."];
+    let builderCurrent = [];
+    const defaultQuotes = [
+      "La langue est la maison de la pensée.",
+      "Apprendre une langue, c'est ouvrir une autre fenêtre sur le monde.",
+      "Petit à petit, l'oiseau fait son nid.",
+      "La clarté vient avec la pratique.",
+      "Chaque phrase correcte est une petite victoire."
+    ];
+    let famousQuotes = [...defaultQuotes];
+
+    function normalize(value) {
+      return value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’]/g, "'");
+    }
+
+    function mode() { return modes[state.modeKey]; }
+    function question() { return mode().questions[state.questionIndex]; }
+
+    function renderModes() {
+      modeList.innerHTML = "";
+      Object.entries(modes).forEach(([key, item]) => {
+        const button = document.createElement("button");
+        button.className = `mode-button${key === state.modeKey ? " active" : ""}`;
+        button.type = "button";
+        button.innerHTML = `<b>${item.name}</b><span>${item.description}</span>`;
+        button.addEventListener("click", () => {
+          state.modeKey = key;
+          state.questionIndex = 0;
+          render();
+        });
+        modeList.appendChild(button);
+      });
+    }
+
+    function renderQuestion() {
+      const item = mode();
+      const q = question();
+      state.answered = false;
+      topicLabel.textContent = item.name;
+      questionCount.textContent = `Question ${state.questionIndex + 1} of ${item.questions.length}`;
+      lesson.innerHTML = studyHTML(item);
+      promptText.innerHTML = speakableText(q.prompt);
+      promptHint.textContent = q.hint;
+      renderRandomQuote();
+      feedback.className = "feedback";
+      feedback.textContent = q.type === "choice" ? "Choose one of the answer buttons above." : "Type your answer in the box above, then press Check.";
+
+      if (q.type === "choice") {
+        answerArea.innerHTML = '<div class="choices"></div>';
+        const choices = answerArea.querySelector(".choices");
+        q.choices.forEach(choice => {
+          const button = document.createElement("button");
+          button.className = "choice";
+          button.type = "button";
+          button.textContent = choice;
+          button.addEventListener("click", () => checkAnswer(choice, button));
+          choices.appendChild(button);
+        });
+      } else {
+        answerArea.innerHTML = '<form class="answer-row" id="textForm"><input class="text-answer" id="textInput" autocomplete="off" autocapitalize="none" placeholder="Type your answer"><button class="primary" type="submit">Check</button></form>';
+        const input = document.getElementById("textInput");
+        document.getElementById("textForm").addEventListener("submit", event => {
+          event.preventDefault();
+          checkAnswer(input.value, input);
+        });
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function parseQuoteFile(text) {
+      try {
+        const parsed = JSON.parse(text);
+        if (Array.isArray(parsed)) {
+          return parsed.map(item => typeof item === "string" ? item : (item.quote || item.text || "")).filter(Boolean);
+        }
+      } catch {
+      }
+
+      return text
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => line && !line.startsWith("#"))
+        .filter(line => !/^QUOTE_ID\s*:/i.test(line))
+        .filter(line => !/^(author|source|language|translation)\s*:/i.test(line))
+        .map(line => line.replace(/^[-*\d.\s]+/, "").trim())
+        .filter(line => !/^QUOTE_ID\s*:/i.test(line))
+        .filter(Boolean);
+    }
+
+    async function loadFamousQuotes() {
+      const quoteSources = [
+        "assets/leek_french_famous_figure_quotes_700_app_ready.txt",
+        "file:///C:/Users/yungl/OneDrive/Desktop/leek_french_famous_figure_quotes_700_app_ready.txt"
+      ];
+
+      for (const source of quoteSources) {
+        try {
+          const response = await fetch(source);
+          if (!response.ok) continue;
+          const loaded = parseQuoteFile(await response.text());
+          if (loaded.length) {
+            famousQuotes = loaded;
+            renderRandomQuote();
+            return;
+          }
+        } catch {
+        }
+      }
+    }
+
+    function renderRandomQuote() {
+      const usableQuotes = famousQuotes.filter(quote => quote && !/^QUOTE_ID\s*:/i.test(quote.trim()));
+      const quote = usableQuotes[Math.floor(Math.random() * usableQuotes.length)] || defaultQuotes[0];
+      questionQuote.textContent = quote;
+    }
+
+    function checkAnswer(value, source) {
+      if (state.answered) return;
+      const q = question();
+      const item = mode();
+      const rule = grammarRuleForFeedback(q);
+      const correct = normalize(value) === normalize(q.answer);
+      state.answered = true;
+      state.attempted += 1;
+
+      if (correct) {
+        state.score += 1;
+        state.streak += 1;
+        feedback.className = "feedback good";
+        feedback.innerHTML = `<b>Correct.</b>${escapeHTML(q.explain)}<div class="rule-note"><b>Grammar rule:</b> ${escapeHTML(rule)}</div>${coachExamplesHTML(item.name)}`;
+        encouragement.textContent = state.streak >= 3 ? "Nice. You are seeing the patterns now." : "Good. That one landed.";
+      } else {
+        state.streak = 0;
+        feedback.className = "feedback bad";
+        feedback.innerHTML = `<b>Not quite. Correct answer: ${escapeHTML(q.answer)}</b>${escapeHTML(q.explain)}<div class="rule-note"><b>Grammar rule:</b> ${escapeHTML(rule)}</div>${coachExamplesHTML(item.name)}`;
+        encouragement.textContent = "Read the note, then take the next one.";
+      }
+
+      if (q.type === "choice") {
+        document.querySelectorAll(".choice").forEach(button => {
+          if (normalize(button.textContent) === normalize(q.answer)) button.classList.add("correct");
+          if (button === source && !correct) button.classList.add("incorrect");
+        });
+      } else {
+        source.disabled = true;
+      }
+      recordPracticeResult(correct, item, q, value);
+      recordDailyLesson();
+      renderScore();
+      renderMastery();
+      renderMistakes();
+      renderAchievements();
+    }
+
+    function grammarRuleForFeedback(q) {
+      const item = mode();
+      return q.rule || `${item.name}: ${(item.grammar && item.grammar[0]) || item.lesson}`;
+    }
+
+    function renderScore() {
+      score.textContent = state.score;
+      streak.textContent = state.streak;
+      accuracy.textContent = state.attempted ? `${Math.round((state.score / state.attempted) * 100)}%` : "0%";
+    }
+
+    function expandLessonsToTenQuestions() {
+      Object.values(modes).forEach(item => {
+        if (!Array.isArray(item.questions) || item.questions.length === 0) return;
+
+        const originals = item.questions.map(question => ({
+          ...question,
+          choices: question.choices ? [...question.choices] : undefined
+        }));
+
+        let index = 0;
+        while (item.questions.length < 10) {
+          const base = originals[index % originals.length];
+          item.questions.push({
+            ...base,
+            choices: base.choices ? [...base.choices] : undefined,
+            prompt: `Review ${item.questions.length + 1}: ${base.prompt}`,
+            hint: `${base.hint} (${item.name} review)`,
+            explain: `${base.explain} This follows the ${item.name} grammar rule.`
+          });
+          index += 1;
+        }
+      });
+    }
+
+    function renderDictionary(filter = "") {
+      const query = normalize(filter);
+      const matches = allDictionary().filter(entry => {
+        return normalize(`${entry.word} ${entry.type} ${entry.meaning} ${entry.example}`).includes(query);
+      });
+
+      dictionaryList.innerHTML = matches.length ? matches.map(entry => `
+        <article class="word-card">
+          <h3><span class="speakable" data-speak="${escapeHTML(entry.word)}">${escapeHTML(entry.word)}</span></h3>
+          <div class="meta">${escapeHTML(entry.type)}</div>
+          <p><b>Meaning:</b> ${escapeHTML(entry.meaning)}</p>
+          <p><b>Example:</b> ${escapeHTML(entry.example)}</p>
+          ${entry.source ? `<p><b>Source:</b> ${escapeHTML(entry.source)}</p>` : ""}
+        </article>
+      `).join("") : '<div class="empty">No words found yet. Try searching a broader word like "time", "pronoun", or "need".</div>';
+    }
+
+    function renderGrammarGuide() {
+      grammarGuideList.innerHTML = Object.values(modes).map(item => {
+        const rules = (item.grammar || [item.lesson]).slice(0, 4).map(rule => `<li>${escapeHTML(rule)}</li>`).join("");
+        const words = (item.vocabulary || []).slice(0, 4).map(([term, meaning]) => `${escapeHTML(term)} = ${escapeHTML(meaning)}`).join("<br>");
+        return `
+          <article class="grammar-card">
+            <h3>${escapeHTML(item.name)}</h3>
+            <p>${escapeHTML(item.lesson)}</p>
+            <ul>${rules}</ul>
+            ${words ? `<p><b>Key words:</b><br>${words}</p>` : ""}
+          </article>
+        `;
+      }).join("");
+    }
+
+    function loadJSON(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function recordPracticeResult(correct, item, q, submitted) {
+      const key = item.name;
+      practiceStats[key] ||= { correct: 0, total: 0 };
+      practiceStats[key].total += 1;
+      if (correct) practiceStats[key].correct += 1;
+      saveJSON("leekFrenchPracticeStats", practiceStats);
+
+      if (!correct) {
+        mistakes.unshift({
+          topic: item.name,
+          prompt: q.prompt,
+          submitted: String(submitted || ""),
+          answer: q.answer,
+          rule: grammarRuleForFeedback(q),
+          time: new Date().toLocaleDateString()
+        });
+        mistakes.splice(24);
+        saveJSON("leekFrenchMistakes", mistakes);
+      }
+    }
+
+    function masteryPercent(topic) {
+      const stat = practiceStats[topic] || { correct: 0, total: 0 };
+      return stat.total ? Math.round((stat.correct / stat.total) * 100) : 0;
+    }
+
+    function renderMastery() {
+      const rows = Object.values(modes).map(item => ({ item, percent: masteryPercent(item.name) }));
+      masteryGrid.innerHTML = rows.map(({ item, percent }) => {
+        const heat = percent >= 80 ? "good" : percent >= 60 ? "warn" : "danger";
+        const level = percent >= 90 ? "Native-level" : percent >= 75 ? "Advanced" : percent >= 50 ? "Intermediate" : "Easy";
+        return `<article class="feature-card ${heat}"><h3>${escapeHTML(item.name)} ${percent >= 80 ? "green" : percent >= 60 ? "yellow" : "red"}</h3><p>${percent}% mastery · next difficulty: ${level}</p><div class="meter"><span style="width:${percent}%"></span></div></article>`;
+      }).join("");
+      const weakest = rows.sort((a, b) => a.percent - b.percent)[0];
+      recommendationCard.innerHTML = weakest ? `<h3>Recommended Practice</h3><p>Work on <b>${escapeHTML(weakest.item.name)}</b> next. Your current mastery is ${weakest.percent}%.</p>` : "<h3>Recommended Practice</h3><p>Answer a few questions to build your heat map.</p>";
+    }
+
+    function coachExamplesHTML(topic) {
+      const examples = {
+        "Y vs En": ["J'y vais. = I am going there.", "J'en parle. = I am talking about it.", "J'en ai trois. = I have three of them."],
+        "En Placement": ["J'en ai deux.", "Il en veut trois.", "Elle en a beaucoup."],
+        "Object Pronouns": ["Je le vois.", "Je lui parle.", "Je le lui donne."],
+        "Subjunctive": ["Il faut que tu sois là.", "Je veux qu'elle vienne.", "Bien qu'il soit tard..."]
+      }[topic] || ["Find the replaced noun or verb trigger.", "Check the pronoun or tense pattern.", "Read the grammar rule, then try one more."];
+      return `<div class="coach-examples"><b>Coach examples:</b><ul>${examples.map(example => `<li>${escapeHTML(example)}</li>`).join("")}</ul></div>`;
+    }
+
+    function renderMistakes() {
+      mistakeList.innerHTML = mistakes.length ? mistakes.map(mistake => `<article class="feature-card"><h3>${escapeHTML(mistake.topic)}</h3><p><b>Question:</b> ${escapeHTML(mistake.prompt)}</p><p><b>Your answer:</b> ${escapeHTML(mistake.submitted)}</p><p><b>Correct:</b> ${escapeHTML(mistake.answer)}</p><p><b>Rule:</b> ${escapeHTML(mistake.rule)}</p></article>`).join("") : '<div class="empty">No mistakes saved yet. Clean slate.</div>';
+    }
+
+    function dailyQuote() {
+      const day = Math.floor(Date.now() / 86400000);
+      return famousQuotes[day % famousQuotes.length] || defaultQuotes[0];
+    }
+
+    function renderDailyQuote() {
+      const quote = dailyQuote();
+      dailyQuoteCard.innerHTML = `<h3>Quote of the day</h3><p class="speakable" data-speak="${escapeHTML(quote)}">${escapeHTML(quote)}</p><div class="tag-row"><span class="tag">Translate it</span><span class="tag">Explain grammar</span><span class="tag">Explain vocabulary</span><span class="tag">Hear pronunciation</span></div>`;
+      dailyExplanation.innerHTML = "<p>Tap Explain grammar to see a simple breakdown of the quote's likely tense, pronouns, and vocabulary.</p>";
+    }
+
+    function explainDailyQuote() {
+      dailyExplanation.innerHTML = `<h3>Grammar + vocabulary</h3><p>This quote is treated like real French: identify the subject, then the verb, then any pronouns or prepositional phrases. Tap words in the quote to hear pronunciation.</p>`;
+    }
+
+    function breakDownSentence() {
+      const text = breakdownInput.value.trim();
+      const labels = [
+        ["Subject", text.match(/\b(je|j'|tu|il|elle|nous|vous|ils|elles)\b/i)?.[0] || "Je"],
+        ["Indirect object", text.match(/\b(lui|leur|me|te|nous|vous)\b/i)?.[0] || "lui"],
+        ["Object pronoun", text.match(/\b(en|y|le|la|les)\b/i)?.[0] || "en"],
+        ["Tense", text.match(/\b(ai|as|a|avons|avez|ont|suis|est|sommes|êtes|sont)\b/i) ? "passé composé / compound tense" : "simple tense"],
+        ["Quantity", text.match(/\b(un|une|deux|trois|beaucoup|plusieurs)\b/i)?.[0] || "quantity not found"],
+        ["Explanation", "This local analyzer highlights likely grammar roles. A future AI backend can make this fully sentence-aware."]
+      ];
+      breakdownOutput.innerHTML = labels.map(([label, value]) => `<article class="feature-card"><h3>${escapeHTML(label)}</h3><p>${escapeHTML(value)}</p></article>`).join("");
+    }
+
+    function renderBuilder() {
+      builderBank.innerHTML = builderTarget.filter(word => !builderCurrent.includes(word)).map(word => `<button class="word-tile" type="button" data-word="${escapeHTML(word)}">${escapeHTML(word)}</button>`).join("");
+      builderAnswer.innerHTML = builderCurrent.map(word => `<button class="word-tile" type="button" data-remove="${escapeHTML(word)}">${escapeHTML(word)}</button>`).join("");
+    }
+
+    function renderAchievements() {
+      const earned = Object.keys(practiceStats).filter(topic => masteryPercent(topic) >= 80).map(topic => `${topic} Master`);
+      achievementList.innerHTML = earned.length ? earned.map(item => `<span class="tag">${escapeHTML(item)}</span>`).join(" ") : "<p>Reach 80% mastery in a topic to unlock achievements.</p>";
+    }
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function yesterdayKey() {
+      const date = new Date();
+      date.setDate(date.getDate() - 1);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function recordDailyLesson() {
+      const today = todayKey();
+      if (dailyStreak.lastDate === today) {
+        renderDailyStreak(false);
+        return;
+      }
+
+      dailyStreak.count = dailyStreak.lastDate === yesterdayKey() ? dailyStreak.count + 1 : 1;
+      dailyStreak.lastDate = today;
+      dailyStreak.celebratedDate = today;
+      saveJSON("leekFrenchDailyStreak", dailyStreak);
+      renderDailyStreak(true);
+    }
+
+    function renderDailyStreak(celebrate = false) {
+      const completedToday = dailyStreak.lastDate === todayKey();
+      const message = celebrate
+        ? `Nice work. You completed today's lesson. Daily streak: ${dailyStreak.count} day${dailyStreak.count === 1 ? "" : "s"}.`
+        : completedToday
+          ? `Today's lesson is done. Daily streak: ${dailyStreak.count} day${dailyStreak.count === 1 ? "" : "s"}.`
+          : `Complete one lesson today to keep your streak. Current streak: ${dailyStreak.count} day${dailyStreak.count === 1 ? "" : "s"}.`;
+      dailyStreakBanner.textContent = message;
+    }
+
+    function allDictionary() {
+      const seen = new Set();
+      return [...savedDictionary, ...dictionary].filter(entry => {
+        const key = normalize(entry.word);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      }).sort((a, b) => a.word.localeCompare(b.word, "fr"));
+    }
+
+    function loadSavedDictionary() {
+      try {
+        return JSON.parse(localStorage.getItem("leekFrenchDictionary") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveDictionaryEntry(entry) {
+      const index = savedDictionary.findIndex(item => normalize(item.word) === normalize(entry.word));
+      if (index >= 0) {
+        savedDictionary[index] = entry;
+      } else {
+        savedDictionary.unshift(entry);
+      }
+      localStorage.setItem("leekFrenchDictionary", JSON.stringify(savedDictionary));
+    }
+
+    async function lookupOnlineWord() {
+      const word = dictionarySearch.value.trim();
+      if (!word) {
+        lookupStatus.textContent = "Type a French word first.";
+        return;
+      }
+
+      lookupButton.disabled = true;
+      lookupStatus.textContent = "Looking online...";
+
+      try {
+        const entry = await fetchFrenchDefinition(word);
+        saveDictionaryEntry(entry);
+        lookupStatus.textContent = `Saved "${entry.word}" to your dictionary.`;
+        renderDictionary(word);
+      } catch (error) {
+        lookupStatus.textContent = error.message || "I could not find that word online.";
+      } finally {
+        lookupButton.disabled = false;
+      }
+    }
+
+    async function fetchFrenchDefinition(word) {
+      const common = commonFrenchDefinition(word);
+      if (common) return common;
+
+      const dictionaryAPI = `https://api.dictionaryapi.dev/api/v2/entries/fr/${encodeURIComponent(word)}`;
+      const response = await fetch(dictionaryAPI);
+
+      if (response.ok) {
+        const data = await response.json();
+        const first = data[0];
+        const meaning = first?.meanings?.[0];
+        const definition = meaning?.definitions?.[0];
+        if (definition?.definition) {
+          return {
+            word: first.word || word,
+            type: meaning.partOfSpeech || "word",
+            meaning: definition.definition,
+            example: definition.example || `Search saved for "${first.word || word}".`,
+            source: "Online French dictionary"
+          };
+        }
+      }
+
+      const wikiURL = `https://en.wiktionary.org/w/api.php?origin=*&action=query&prop=extracts&explaintext=1&exintro=1&format=json&titles=${encodeURIComponent(word)}`;
+      const wikiResponse = await fetch(wikiURL);
+      if (!wikiResponse.ok) throw new Error("I could not find that word online.");
+
+      const wikiData = await wikiResponse.json();
+      const page = Object.values(wikiData.query?.pages || {})[0];
+      const extract = page?.extract?.trim();
+      if (!extract) {
+        const translated = await translateLookupDefinition(word);
+        if (translated) return translated;
+        throw new Error("I could not find that word online.");
+      }
+
+      return {
+        word,
+        type: "word",
+        meaning: extract.split("\n").filter(Boolean).slice(0, 2).join(" "),
+        example: `Saved from an online lookup for "${word}".`,
+        source: "Wiktionary"
+      };
+    }
+
+    function commonFrenchDefinition(word) {
+      const key = normalize(word);
+      const commonWords = {
+        savoir: ["verb", "to know a fact; to know how to do something", "Je sais la réponse. / Je sais nager."],
+        connaitre: ["verb", "to know or be familiar with a person, place, or thing", "Je connais cette ville."],
+        être: ["verb", "to be", "Il faut que tu sois là."],
+        etre: ["verb", "to be", "Il faut que tu sois là."],
+        avoir: ["verb", "to have", "J'en ai trois."],
+        aller: ["verb", "to go", "J'y vais demain."],
+        faire: ["verb", "to do; to make", "Je fais mes devoirs."],
+        venir: ["verb", "to come", "Je veux qu'elle vienne."],
+        vouloir: ["verb", "to want", "Il en veut trois."],
+        pouvoir: ["verb", "to be able to; can", "Je voudrais pouvoir venir."],
+        devoir: ["verb", "to have to; must", "Je dois partir."],
+        parler: ["verb", "to speak; to talk", "J'en parle souvent."],
+        besoin: ["noun", "need", "J'en ai besoin."],
+        dont: ["relative pronoun", "whose; of which; that ... of", "C'est le sujet dont je me souviens."],
+        lequel: ["relative pronoun", "which one; which", "Le livre dans lequel j'écris."],
+        jamais: ["adverb", "never; ever", "Il ne vient jamais ici."],
+        seulement: ["adverb", "only", "J'ai seulement deux euros."]
+      };
+      const found = commonWords[key];
+      if (!found) return null;
+      return {
+        word,
+        type: found[0],
+        meaning: found[1],
+        example: found[2],
+        source: "Built-in Leek French dictionary"
+      };
+    }
+
+    async function translateLookupDefinition(word) {
+      try {
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=fr|en`;
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const translated = data.responseData?.translatedText?.trim();
+        if (!translated || normalize(translated) === normalize(word)) return null;
+        return {
+          word,
+          type: "word",
+          meaning: translated,
+          example: `Translation lookup: ${word} = ${translated}.`,
+          source: "Online translation lookup"
+        };
+      } catch {
+        return null;
+      }
+    }
+
+    function loadSavedTranslations() {
+      try {
+        return JSON.parse(localStorage.getItem("leekFrenchTranslations") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveTranslation(entry) {
+      savedTranslations.unshift(entry);
+      savedTranslations.splice(12);
+      localStorage.setItem("leekFrenchTranslations", JSON.stringify(savedTranslations));
+      renderTranslationHistory();
+    }
+
+    function renderTranslationHistory() {
+      translationHistory.innerHTML = savedTranslations.length ? savedTranslations.map(entry => `
+        <article class="word-card">
+          <h3>${escapeHTML(entry.direction)}</h3>
+          <p><b>Original:</b> ${escapeHTML(entry.input)}</p>
+          <p><b>Translation:</b> ${escapeHTML(entry.output)}</p>
+        </article>
+      `).join("") : '<div class="empty">No saved translations yet.</div>';
+    }
+
+    async function translateText() {
+      const text = translateInput.value.trim();
+      if (!text) {
+        translateStatus.textContent = "Type something first.";
+        return;
+      }
+
+      translateButton.disabled = true;
+      translateStatus.textContent = "Translating...";
+
+      try {
+        const langpair = translationDirection.value;
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(langpair)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Translation service is not available right now.");
+        const data = await response.json();
+        const translated = data.responseData?.translatedText?.trim();
+        if (!translated) throw new Error("I could not translate that text.");
+
+        translateOutput.textContent = translated;
+        translateStatus.textContent = "Saved.";
+        saveTranslation({
+          direction: langpair === "fr|en" ? "French to English" : "English to French",
+          input: text,
+          output: translated
+        });
+      } catch (error) {
+        translateStatus.textContent = error.message || "Translation failed.";
+      } finally {
+        translateButton.disabled = false;
+      }
+    }
+
+    async function translateLyrics() {
+      const text = lyricsInput.value.trim();
+      if (!text) {
+        lyricsStatus.textContent = "Paste lyrics first.";
+        return;
+      }
+
+      lyricsTranslateButton.disabled = true;
+      lyricsStatus.textContent = "Translating lyrics...";
+
+      try {
+        const backend = lyricsBackendUrl.value.trim();
+        localStorage.setItem("leekFrenchLyricsBackend", backend);
+        const direction = lyricsDirection.value;
+        const translation = backend
+          ? await translateLyricsWithAIBackend(backend, text, direction)
+          : await translateLyricsWithFallback(text, direction);
+        lyricsOutput.textContent = translation;
+        lyricsStatus.textContent = backend ? "AI translation complete." : "Fallback translation complete.";
+      } catch (error) {
+        lyricsStatus.textContent = error.message || "Lyrics translation failed.";
+      } finally {
+        lyricsTranslateButton.disabled = false;
+      }
+    }
+
+    async function translateLyricsWithAIBackend(backend, text, direction) {
+      const response = await fetch(backend, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, direction })
+      });
+      if (!response.ok) throw new Error("The AI backend did not respond.");
+      const data = await response.json();
+      if (!data.translation) throw new Error("The AI backend did not return a translation.");
+      return data.translation;
+    }
+
+    async function translateLyricsWithFallback(text, direction) {
+      const lines = text.split(/\r?\n/);
+      const translated = [];
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          translated.push("");
+          continue;
+        }
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=${encodeURIComponent(direction)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Fallback translation service is unavailable.");
+        const data = await response.json();
+        translated.push(data.responseData?.translatedText || trimmed);
+      }
+      return translated.join("\n");
+    }
+
+    async function callAIBackend(payload) {
+      const backend = aiBackendUrl.value.trim();
+      localStorage.setItem("leekFrenchAIBackend", backend);
+      if (!backend) return null;
+      const response = await fetch(backend, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("The AI backend did not respond.");
+      return response.json();
+    }
+
+    function populateAITopics() {
+      aiTopicSelect.innerHTML = Object.values(modes).map(item => `<option value="${escapeHTML(item.name)}">${escapeHTML(item.name)}</option>`).join("");
+    }
+
+    async function generateAIQuestions() {
+      aiGenerateButton.disabled = true;
+      aiGenerateStatus.textContent = "Generating...";
+      try {
+        const topic = aiTopicSelect.value;
+        const difficulty = aiDifficultySelect.value;
+        const ai = await callAIBackend({ task: "generate_questions", topic, difficulty, count: 10 });
+        const questions = ai?.questions || localGeneratedQuestions(topic, difficulty);
+        aiGeneratedOutput.innerHTML = questions.map((q, index) => `<article class="feature-card"><h3>Question ${index + 1}</h3><p>${escapeHTML(q.prompt)}</p><p><b>Answer:</b> ${escapeHTML(q.answer)}</p><p><b>Why:</b> ${escapeHTML(q.explain)}</p></article>`).join("");
+        aiGenerateStatus.textContent = ai ? "AI questions ready." : "Local fallback questions ready. Add a backend for true AI generation.";
+      } catch (error) {
+        aiGenerateStatus.textContent = error.message || "Question generation failed.";
+      } finally {
+        aiGenerateButton.disabled = false;
+      }
+    }
+
+    function localGeneratedQuestions(topic, difficulty) {
+      const item = Object.values(modes).find(mode => mode.name === topic) || mode();
+      return item.questions.slice(0, 10).map((q, index) => ({
+        prompt: `${difficulty} ${topic} drill ${index + 1}: ${q.prompt}`,
+        answer: q.answer,
+        explain: q.explain
+      }));
+    }
+
+    async function askAIConversationCoach() {
+      const message = aiChatInput.value.trim();
+      if (!message) {
+        aiChatStatus.textContent = "Write something first.";
+        return;
+      }
+      aiChatButton.disabled = true;
+      aiChatStatus.textContent = "Thinking...";
+      try {
+        const ai = await callAIBackend({ task: "conversation_coach", message });
+        const reply = ai?.reply || localCoachReply(message);
+        aiCoachOutput.innerHTML = `<h3>Coach</h3><p>${escapeHTML(reply)}</p>`;
+        aiChatStatus.textContent = ai ? "AI coach replied." : "Local coach replied. Add a backend for deeper correction.";
+      } catch (error) {
+        aiChatStatus.textContent = error.message || "Coach failed.";
+      } finally {
+        aiChatButton.disabled = false;
+      }
+    }
+
+    function localCoachReply(message) {
+      const hints = [];
+      if (/\ben\b/i.test(message)) hints.push("You used en. Check whether it replaces de + noun or a quantity.");
+      if (/\by\b/i.test(message)) hints.push("You used y. Check whether it replaces à + place or à + thing.");
+      if (/\bque\b/i.test(message)) hints.push("Que may introduce a relative clause or reported speech; identify its role.");
+      if (!hints.length) hints.push("Identify the subject, verb, tense, and any pronouns. Then compare the sentence to the Grammar Guide.");
+      return `This is a local coaching pass: ${hints.join(" ")} A native-style AI coach can give fuller corrections once you connect a backend.`;
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[character]));
+    }
+
+    function speakableText(text) {
+      return escapeHTML(text).replace(/[\p{L}À-ÿ][\p{L}À-ÿ'’.-]*/gu, word => (
+        `<span class="speakable" data-speak="${word}">${word}</span>`
+      ));
+    }
+
+    function speakFrench(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "fr-FR";
+      utterance.rate = .86;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function studyHTML(item) {
+      const grammar = (item.grammar || []).map(point => `<li>${escapeHTML(point)}</li>`).join("");
+      const vocabulary = (item.vocabulary || []).map(([term, meaning]) => (
+        `<div class="vocab-item"><span class="speakable" data-speak="${escapeHTML(term)}">${escapeHTML(term)}</span><span>${escapeHTML(meaning)}</span></div>`
+      )).join("");
+
+      return `
+        <div>${escapeHTML(item.lesson)}</div>
+        <div class="study-section">
+          <b>Grammar explanation</b>
+          <ul>${grammar}</ul>
+        </div>
+        <div class="study-section">
+          <b>Word meanings</b>
+          <div class="vocab-list">${vocabulary}</div>
+        </div>
+      `;
+    }
+
+    function render() {
+      renderModes();
+      renderQuestion();
+      renderScore();
+    }
+
+    nextButton.addEventListener("click", () => {
+      state.questionIndex = (state.questionIndex + 1) % mode().questions.length;
+      renderQuestion();
+    });
+
+    resetButton.addEventListener("click", () => {
+      state.score = 0;
+      state.attempted = 0;
+      state.streak = 0;
+      encouragement.textContent = "Fresh score, fresh brain.";
+      renderScore();
+      renderQuestion();
+    });
+
+    document.getElementById("coverImage").addEventListener("error", event => {
+      event.currentTarget.style.display = "none";
+      document.getElementById("coverSection").style.gridTemplateColumns = "1fr";
+    });
+
+    document.querySelectorAll(".tab-button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab-button").forEach(tab => tab.classList.remove("active"));
+        document.querySelectorAll(".app-section").forEach(section => section.hidden = true);
+        button.classList.add("active");
+        document.getElementById(button.dataset.section).hidden = false;
+      });
+    });
+
+    dictionarySearch.addEventListener("input", event => renderDictionary(event.target.value));
+    lookupButton.addEventListener("click", lookupOnlineWord);
+    document.addEventListener("click", event => {
+      const target = event.target.closest(".speakable");
+      if (!target) return;
+      event.stopPropagation();
+      speakFrench(target.dataset.speak || target.textContent);
+    });
+    translateButton.addEventListener("click", translateText);
+    clearTranslationButton.addEventListener("click", () => {
+      translateInput.value = "";
+      translateOutput.textContent = "Your translation will appear here.";
+      translateStatus.textContent = "";
+    });
+    lyricsBackendUrl.value = localStorage.getItem("leekFrenchLyricsBackend") || "";
+    aiBackendUrl.value = localStorage.getItem("leekFrenchAIBackend") || "";
+    lyricsTranslateButton.addEventListener("click", translateLyrics);
+    lyricsClearButton.addEventListener("click", () => {
+      lyricsInput.value = "";
+      lyricsOutput.textContent = "Your lyrics translation will appear here.";
+      lyricsStatus.textContent = "";
+    });
+    aiGenerateButton.addEventListener("click", generateAIQuestions);
+    aiChatButton.addEventListener("click", askAIConversationCoach);
+    document.addEventListener("click", event => {
+      const opener = event.target.closest("[data-open-section]");
+      if (!opener) return;
+      document.querySelector(`[data-section="${opener.dataset.openSection}"]`)?.click();
+    });
+    document.getElementById("dailySpeakButton").addEventListener("click", () => speakFrench(dailyQuote()));
+    document.getElementById("dailyExplainButton").addEventListener("click", explainDailyQuote);
+    document.getElementById("breakdownButton").addEventListener("click", breakDownSentence);
+    document.getElementById("breakdownSpeakButton").addEventListener("click", () => speakFrench(breakdownInput.value));
+    builderBank.addEventListener("click", event => {
+      const tile = event.target.closest("[data-word]");
+      if (!tile) return;
+      builderCurrent.push(tile.dataset.word);
+      renderBuilder();
+    });
+    builderAnswer.addEventListener("click", event => {
+      const tile = event.target.closest("[data-remove]");
+      if (!tile) return;
+      builderCurrent = builderCurrent.filter((word, index) => index !== builderCurrent.indexOf(tile.dataset.remove));
+      renderBuilder();
+    });
+    document.getElementById("builderCheckButton").addEventListener("click", () => {
+      const built = builderCurrent.join(" ");
+      builderFeedback.innerHTML = built === builderTarget.join(" ") ? "<b>Correct.</b> Je lui ai parlé hier follows pronoun-before-verb placement." : `<b>Not yet.</b> You built: ${escapeHTML(built || "nothing yet")}`;
+    });
+    document.getElementById("builderResetButton").addEventListener("click", () => {
+      builderCurrent = [];
+      builderFeedback.textContent = "";
+      renderBuilder();
+    });
+    document.getElementById("clearMistakesButton").addEventListener("click", () => {
+      mistakes.splice(0);
+      saveJSON("leekFrenchMistakes", mistakes);
+      renderMistakes();
+    });
+    document.getElementById("practiceWeakButton").addEventListener("click", () => {
+      const weakest = Object.values(modes).sort((a, b) => masteryPercent(a.name) - masteryPercent(b.name))[0];
+      if (!weakest) return;
+      state.modeKey = Object.keys(modes).find(key => modes[key] === weakest) || state.modeKey;
+      state.questionIndex = 0;
+      document.querySelector('[data-section="practiceSection"]').click();
+      render();
+    });
+    document.getElementById("bossButton").addEventListener("click", () => document.getElementById("practiceWeakButton").click());
+    document.getElementById("examButton").addEventListener("click", () => {
+      recommendationCard.innerHTML = "<h3>Exam Mode</h3><p>Use Challenge Mode by answering 10 questions in a row, then review misses in Notebook.</p>";
+      document.querySelector('[data-section="masterySection"]').click();
+    });
+
+    expandLessonsToTenQuestions();
+    render();
+    renderDictionary();
+    renderTranslationHistory();
+    renderGrammarGuide();
+    renderMastery();
+    renderMistakes();
+    renderDailyQuote();
+    breakDownSentence();
+    renderBuilder();
+    renderAchievements();
+    renderDailyStreak();
+    populateAITopics();
+    loadFamousQuotes();
+  </script>
+</body>
+</html>
